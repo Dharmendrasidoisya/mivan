@@ -1,0 +1,22 @@
+[20-Jan-2026 09:51:30 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 11:52:16 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 11:54:27 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 11:56:38 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 12:00:15 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 12:02:26 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 12:03:00 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host.
+[20-Jan-2026 12:05:15 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for mail.mivandholera.com failed: Name or service not known
+[20-Jan-2026 12:12:50 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for mail.mivandholera.com failed: Name or service not known
+[20-Jan-2026 12:27:19 UTC] PHP Warning:  Undefined variable $form_heading in /home/ebomgpv2z5z6/public_html/public/config.php on line 68
+[20-Jan-2026 12:44:58 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 13:19:49 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for smtp.mivandholera.com failed: Name or service not known
+[20-Jan-2026 13:25:51 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for inquiry.mivandholera.com failed: Name or service not known
+[20-Jan-2026 13:34:20 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 20:07:37 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[20-Jan-2026 20:38:12 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[21-Jan-2026 04:18:02 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server SMTP code: 101 Additional SMTP info: Network is unreachable
+[21-Jan-2026 04:22:11 UTC] Mailer Error: SMTP Error: Could not connect to SMTP host. Failed to connect to serverSMTP server error: Failed to connect to server Additional SMTP info: php_network_getaddresses: getaddrinfo for mail.mivandholera.com failed: Name or service not known
+[21-Jan-2026 07:17:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method PHPMailer\PHPMailer\PHPMailer::BCC() in /home/ebomgpv2z5z6/public_html/public/config.php:60
+Stack trace:
+#0 {main}
+  thrown in /home/ebomgpv2z5z6/public_html/public/config.php on line 60
