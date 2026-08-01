@@ -9,7 +9,6 @@ use Botble\Ecommerce\Facades\EcommerceHelper;
 use Botble\Ecommerce\Models\FlashSale;
 use Botble\Ecommerce\Repositories\Interfaces\ProductCategoryInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
-use Botble\Faq\Repositories\Interfaces\FaqCategoryInterface;
 use Botble\Shortcode\Compilers\Shortcode;
 use Botble\Theme\Facades\Theme;
 use Botble\Theme\Supports\ThemeSupport;
@@ -26,275 +25,125 @@ app()->booted(function () {
         }, 120);
     }
 
-    add_shortcode('site-features', __('Site features'), __('Site features'), function (Shortcode $shortcode) {
-        return Theme::partial('shortcodes.site-features', compact('shortcode'));
-    });
+    register_theme_shortcode('site-features', __('Site features'));
 
-    shortcode()->setAdminConfig('site-features', function (array $attributes) {
-        return Theme::partial('shortcodes.site-features-admin-config', compact('attributes'));
-    });
-
-
-
-    // if (is_plugin_active('blog')) {
-
-    add_shortcode(
+    register_theme_shortcode(
         'Ads-blogs',
         __('Ads Blogs'),
-        __('Ads Blogs'),
-
-        function (Shortcode $shortcode) {
-            $posts = get_featured_blog_posts(array_merge([
-                'take' => (int)$shortcode->limit ?: 50,
-            ],));
-            return Theme::partial('shortcodes.Ads-blogs', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'icon' => $shortcode->icon, // Include the image attribute
-                'shortcode' => $shortcode,
-                'posts' => $posts,
-            ]);
-        }
+        ['title', 'headertitle', 'description', 'icon'],
+        fn () => ['posts' => get_featured_blog_posts()]
     );
 
-    shortcode()->setAdminConfig('Ads-blogs', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-blogs-admin-config', compact('attributes'));
-    });
-
-
-
-    add_shortcode(
+    register_theme_shortcode(
         'Ads-blogs-page',
         __('Ads Blogs-page'),
-        __('Ads Blogs-page'),
-
-        function (Shortcode $shortcode) {
-            $posts = get_featured_blog_posts(array_merge([
-                'take' => (int)$shortcode->limit ?: 50,
-            ],));
-            return Theme::partial('shortcodes.Ads-blogs-page', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'icon' => $shortcode->icon,
-                'shortcode' => $shortcode,
-                'posts' => $posts,
-            ]);
-        }
+        ['title', 'headertitle', 'description', 'icon'],
+        fn () => ['posts' => get_featured_blog_posts()]
     );
 
-    shortcode()->setAdminConfig('Ads-blogs-page', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-blogs-page-admin-config', compact('attributes'));
-    });
-
-    // }
-
-    // if (is_plugin_active('services')) {
-
-    add_shortcode(
+    register_theme_shortcode(
         'Ads-services',
         __('Ads Services'),
-        __('Ads Services'),
-
-        function (Shortcode $shortcode) {
-            $projects = get_featured_projects_posts(array_merge([
-                'take' => (int)$shortcode->limit ?: 50,
-            ],));
-            // dd($projects);
-            return Theme::partial('shortcodes.Ads-services', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'icon' => $shortcode->icon, // Include the image attribute
-                'shortcode' => $shortcode,
-                'projects' => $projects,
-            ]);
-        }
+        ['title', 'headertitle', 'description', 'icon'],
+        fn () => ['projects' => get_featured_projects_posts()]
     );
-
-    shortcode()->setAdminConfig('Ads-services', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-services-admin-config', compact('attributes'));
-    });
-
-    // }
 
     if (is_plugin_active('products')) {
-
-        add_shortcode(
+        register_theme_shortcode(
             'Ads-products',
             __('Ads Products'),
-            __('Ads Products'),
-
-            function (Shortcode $shortcode) {
-                $products = get_featured_projects_posts(array_merge([
-                    'take' => (int)$shortcode->limit ?: 50,
-                ],));
-                return Theme::partial('shortcodes.Ads-products', [
-                    'title' => $shortcode->title,
-                    'headertitle' => $shortcode->headertitle,
-                    'description' => $shortcode->description,
-                    'icon' => $shortcode->icon, // Include the image attribute
-                    'shortcode' => $shortcode,
-                    'products' => $products,
-                ]);
-            }
+            ['title', 'headertitle', 'description', 'icon'],
+            fn () => ['products' => get_featured_projects_posts()]
         );
-
-        shortcode()->setAdminConfig('Ads-products', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-products-admin-config', compact('attributes'));
-        });
     }
 
-    add_shortcode(
+    register_theme_shortcode(
         'Ads-productcategory',
         __('Ads Productcategory'),
-        __('Ads Productcategory'),
-        function (Shortcode $shortcode) {
-            $products = get_featured_products_posts(array_merge([
-                'take' => (int)$shortcode->limit ?: 50,
-                'order_by' => 'id',
-                'order' => 'desc',
-            ]));
-
-            return Theme::partial('shortcodes.Ads-productcategory', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'icon' => $shortcode->icon,
-                'shortcode' => $shortcode,
-                'products' => $products,
-            ]);
-        }
+        ['title', 'headertitle', 'description', 'icon'],
+        fn () => ['products' => get_featured_products_posts()]
     );
 
-    shortcode()->setAdminConfig('Ads-productcategory', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-productcategory-admin-config', compact('attributes'));
-    });
-    // if (is_plugin_active('services')) {
-
-    add_shortcode(
+    register_theme_shortcode(
         'Ads-servicescategory',
         __('Ads Servicescategory'),
-        __('Ads Servicescategory'),
-
-        function (Shortcode $shortcode) {
-            $productcategory = get_featured_projects_posts(array_merge([
-                'take' => (int)$shortcode->limit ?: 50,
-            ],));
-            // dd($productcategory);
-            return Theme::partial('shortcodes.Ads-servicescategory', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'icon' => $shortcode->icon, // Include the image attribute
-                'shortcode' => $shortcode,
-                'productcategory' => $productcategory,
-            ]);
-        }
-
+        ['title', 'headertitle', 'description', 'icon'],
+        fn () => ['productcategory' => get_featured_projects_posts()]
     );
 
-    shortcode()->setAdminConfig('Ads-servicescategory', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-servicescategory-admin-config', compact('attributes'));
-    });
-
-    // }
     if (is_plugin_active('ecommerce')) {
-        add_shortcode(
+        register_theme_shortcode(
             'featured-product-categories',
             __('Featured Product Categories'),
-            __('Featured Product Categories'),
-            function (Shortcode $shortcode) {
-                $categories = get_featured_product_categories();
-
-                return Theme::partial('shortcodes.featured-product-categories', [
-                    'title' => $shortcode->title,
-                    'headertitle' => $shortcode->headertitle,
-                    'description' => $shortcode->description,
-                    'categories' => $categories,
-                    'shortcode' => $shortcode,
-                ]);
+            ['title', 'headertitle', 'description'],
+            function () {
+                return ['categories' => get_featured_product_categories()];
             }
         );
 
-        shortcode()->setAdminConfig('featured-product-categories', function (array $attributes) {
-            return Theme::partial('shortcodes.featured-product-categories-admin-config', compact('attributes'));
-        });
-
-
-
-        add_shortcode('featured-products', __('Featured products'), __('Featured products'), function (Shortcode $shortcode) {
-            if (! is_plugin_active('ecommerce')) {
-                return null;
+        register_theme_shortcode(
+            'featured-products',
+            __('Featured products'),
+            ['title', 'description'],
+            function (Shortcode $shortcode) {
+                return [
+                    'products' => get_featured_products(array_merge([
+                        'take' => (int)$shortcode->limit ?: 8,
+                    ], EcommerceHelper::withReviewsParams())),
+                ];
             }
+        );
 
-            $products = get_featured_products(array_merge([
-                'take' => (int)$shortcode->limit ?: 8,
-            ], EcommerceHelper::withReviewsParams()));
+        register_theme_shortcode(
+            'flash-sale',
+            __('Flash sale'),
+            ['title'],
+            function (Shortcode $shortcode) {
+                $flashSales = FlashSale::query()
+                    ->notExpired()
+                    ->wherePublished()
+                    ->get();
 
-            return Theme::partial('shortcodes.featured-products', [
-                'title' => $shortcode->title,
-                'description' => $shortcode->description,
-                'products' => $products,
-                'shortcode' => $shortcode,
-            ]);
-        });
+                if (! $flashSales->count()) {
+                    return null;
+                }
 
-        shortcode()->setAdminConfig('featured-products', function (array $attributes) {
-            return Theme::partial('shortcodes.featured-products-admin-config', compact('attributes'));
-        });
+                $flashSale = $flashSales->first();
 
-        add_shortcode('flash-sale', __('Flash sale'), __('Flash sale'), function (Shortcode $shortcode) {
-            $flashSales = FlashSale::query()
-                ->notExpired()
-                ->wherePublished()
-                ->get();
+                if (! $flashSale || ! $flashSale->products->count()) {
+                    return null;
+                }
 
-            if (! $flashSales->count()) {
-                return null;
+                foreach ($flashSales as $item) {
+                    $item->load([
+                        'products' => function (BelongsToMany $query) use ($shortcode) {
+                            $reviewParams = EcommerceHelper::withReviewsParams();
+
+                            if (EcommerceHelper::isReviewEnabled()) {
+                                $query->withAvg($reviewParams['withAvg'][0], $reviewParams['withAvg'][1]);
+                            }
+
+                            return $query
+                                ->wherePublished()
+                                ->limit((int)$shortcode->limit ?: 2)
+                                ->withCount($reviewParams['withCount'])
+                                ->with(EcommerceHelper::withProductEagerLoadingRelations());
+                        },
+                    ]);
+                }
+
+                return [
+                    'showPopup' => $shortcode->show_popup,
+                    'flashSale' => $flashSale,
+                    'flashSales' => $flashSales,
+                ];
             }
+        );
 
-            $flashSale = $flashSales->first();
-
-            if (! $flashSale || ! $flashSale->products->count()) {
-                return null;
-            }
-
-            foreach ($flashSales as $item) {
-                $item->load([
-                    'products' => function (BelongsToMany $query) use ($shortcode) {
-                        $reviewParams = EcommerceHelper::withReviewsParams();
-
-                        if (EcommerceHelper::isReviewEnabled()) {
-                            $query->withAvg($reviewParams['withAvg'][0], $reviewParams['withAvg'][1]);
-                        }
-
-                        return $query
-                            ->wherePublished()
-                            ->limit((int)$shortcode->limit ?: 2)
-                            ->withCount($reviewParams['withCount'])
-                            ->with(EcommerceHelper::withProductEagerLoadingRelations());
-                    },
-                ]);
-            }
-
-            return Theme::partial('shortcodes.flash-sale', [
-                'title' => $shortcode->title,
-                'showPopup' => $shortcode->show_popup,
-                'flashSale' => $flashSale,
-                'flashSales' => $flashSales,
-            ]);
-        });
-
-        shortcode()->setAdminConfig('flash-sale', function (array $attributes) {
-            return Theme::partial('shortcodes.flash-sale-admin-config', compact('attributes'));
-        });
-
-        add_shortcode(
+        register_theme_shortcode(
             'product-collections',
             __('Product Collections'),
-            __('Product Collections'),
+            ['title'],
             function (Shortcode $shortcode) {
                 $productCollections = get_product_collections(
                     ['status' => BaseStatusEnum::PUBLISHED],
@@ -308,32 +157,25 @@ app()->booted(function () {
 
                 $limit = (int)$shortcode->limit ?: 8;
 
-                $products = get_products_by_collections(array_merge([
-                    'collections' => [
-                        'by' => 'id',
-                        'value_in' => [$productCollections->first()->id],
-                    ],
-                    'take' => $limit,
-                    'with' => EcommerceHelper::withProductEagerLoadingRelations(),
-                ], EcommerceHelper::withReviewsParams()));
-
-                return Theme::partial('shortcodes.product-collections', [
-                    'title' => $shortcode->title,
+                return [
                     'productCollections' => $productCollections,
                     'limit' => $limit,
-                    'products' => $products,
-                ]);
+                    'products' => get_products_by_collections(array_merge([
+                        'collections' => [
+                            'by' => 'id',
+                            'value_in' => [$productCollections->first()->id],
+                        ],
+                        'take' => $limit,
+                        'with' => EcommerceHelper::withProductEagerLoadingRelations(),
+                    ], EcommerceHelper::withReviewsParams())),
+                ];
             }
         );
 
-        shortcode()->setAdminConfig('product-collections', function (array $attributes) {
-            return Theme::partial('shortcodes.product-collections-admin-config', compact('attributes'));
-        });
-
-        add_shortcode(
+        register_theme_shortcode(
             'product-category-products',
             __('Product category products'),
-            __('Product category products'),
+            [],
             function (Shortcode $shortcode) {
                 $category = app(ProductCategoryInterface::class)->getFirstBy(
                     [
@@ -354,47 +196,37 @@ app()->booted(function () {
 
                 $limit = (int)$shortcode->limit ?: 8;
 
-                $products = app(ProductInterface::class)->getProductsByCategories(array_merge([
-                    'categories' => [
-                        'by' => 'id',
-                        'value_in' => array_merge([$category->id], $category->activeChildren->pluck('id')->all()),
-                    ],
-                    'take' => $limit,
-                ], EcommerceHelper::withReviewsParams()));
-
-                return Theme::partial('shortcodes.product-category-products', compact('category', 'products', 'limit'));
+                return [
+                    'category' => $category,
+                    'limit' => $limit,
+                    'products' => app(ProductInterface::class)->getProductsByCategories(array_merge([
+                        'categories' => [
+                            'by' => 'id',
+                            'value_in' => array_merge(
+                                [$category->id],
+                                $category->activeChildren->pluck('id')->all()
+                            ),
+                        ],
+                        'take' => $limit,
+                    ], EcommerceHelper::withReviewsParams())),
+                ];
+            },
+            null,
+            function () {
+                return [
+                    'categories' => app(ProductCategoryInterface::class)->pluck(
+                        'name',
+                        'id',
+                        ['status' => BaseStatusEnum::PUBLISHED]
+                    ),
+                ];
             }
         );
 
-        shortcode()->setAdminConfig('product-category-products', function (array $attributes) {
-            $categories = app(ProductCategoryInterface::class)->pluck(
-                'name',
-                'id',
-                ['status' => BaseStatusEnum::PUBLISHED]
-            );
-
-            return Theme::partial(
-                'shortcodes.product-category-products-admin-config',
-                compact('categories', 'attributes')
-            );
-        });
-
-        add_shortcode('featured-brands', __('Featured Brands'), __('Featured Brands'), function (Shortcode $shortcode) {
-            $brands = get_featured_brands();
-
-            return Theme::partial('shortcodes.featured-brands', [
-                'title' => $shortcode->title,
-                'brands' => $brands,
-                'shortcode' => $shortcode,
-            ]);
-        });
-
-        shortcode()->setAdminConfig('featured-brands', function (array $attributes) {
-            return Theme::partial('shortcodes.featured-brands-admin-config', compact('attributes'));
+        register_theme_shortcode('featured-brands', __('Featured Brands'), ['title'], function () {
+            return ['brands' => get_featured_brands()];
         });
     }
-
-
 
     if (is_plugin_active('ads')) {
         add_shortcode('theme-ads', __('Theme ads'), __('Theme ads'), function (Shortcode $shortcode) {
@@ -473,14 +305,10 @@ app()->booted(function () {
     }
 
     if (is_plugin_active('blog')) {
-        add_shortcode('featured-news', __('Featured News'), __('Featured News'), function (Shortcode $shortcode) {
-            $posts = app(PostInterface::class)->getFeatured(4, ['slugable', 'categories', 'categories.slugable']);
-
-            return Theme::partial('shortcodes.featured-news', ['title' => $shortcode->title, 'posts' => $posts]);
-        });
-
-        shortcode()->setAdminConfig('featured-news', function (array $attributes) {
-            return Theme::partial('shortcodes.featured-news-admin-config', compact('attributes'));
+        register_theme_shortcode('featured-news', __('Featured News'), ['title'], function () {
+            return [
+                'posts' => app(PostInterface::class)->getFeatured(4, ['slugable', 'categories', 'categories.slugable']),
+            ];
         });
     }
 
@@ -491,579 +319,144 @@ app()->booted(function () {
     }
 
     if (is_plugin_active('newsletter')) {
-        add_shortcode('newsletter-form', __('Newsletter Form'), __('Newsletter Form'), function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.newsletter-form', [
-                'title' => $shortcode->title,
-                'description' => $shortcode->description,
-            ]);
-        });
-
-        shortcode()->setAdminConfig('newsletter-form', function (array $attributes) {
-            return Theme::partial('shortcodes.newsletter-form-admin-config', compact('attributes'));
-        });
+        register_theme_shortcode('newsletter-form', __('Newsletter Form'), ['title', 'description']);
     }
 
-    add_shortcode('our-offices', __('Our offices'), __('Our offices'), function () {
-        return Theme::partial('shortcodes.our-offices');
-    });
-
-    shortcode()->setAdminConfig('our-offices', function (array $attributes) {
-        return Theme::partial('shortcodes.our-offices-admin-config', compact('attributes'));
-    });
+    register_theme_shortcode('our-offices', __('Our offices'));
 
     if (is_plugin_active('faq')) {
-        add_shortcode(
+        register_theme_shortcode(
             'faqs',
             __('FAQs'),
-            __('List of FAQs'),
+            ['title', 'description', 'description2'],
             function (Shortcode $shortcode) {
-                $params = [
-                    'condition' => [
-                        'status' => BaseStatusEnum::PUBLISHED,
-                    ],
-                    'with' => [
-                        'faqs' => function ($query) {
-                            $query->wherePublished();
-                        },
-                    ],
-                    'order_by' => [
-                        'faq_categories.order' => 'ASC',
-                        'faq_categories.created_at' => 'DESC',
-                    ],
+                return [
+                    'categories' => get_faq_categories_for_shortcode($shortcode),
+                    'project' => get_featured_projects_posts()->first(),
                 ];
-
-                if ($shortcode->category_id) {
-                    $params['condition']['id'] = $shortcode->category_id;
-                }
-
-                $categories = app(FaqCategoryInterface::class)->advancedGet($params);
-                $plotData = [];
-
-foreach ($categories as $category) {
-    foreach ($category->faqs as $faq) {
-        if (!empty($faq->plot)) {
-            $plotData[$faq->plot] = [
-                'area'   => $faq->area,
-                'north'  => $faq->north,
-                'south'  => $faq->south,
-                'east'   => $faq->east,
-                'west'   => $faq->west,
-                'price'  => $faq->price,
-                'client' => $faq->client,
-                'status' => $faq->status ?? 'Available',
-                    'plotData' => $plotData,
-            ];
-        }
-    }
-}
-           
-             $project = get_featured_projects_posts([
-    'take' => 1,
-    'select' => ['id', 'title', 'location', 'slug', 'image'],
-])->first();
-                $project = $project->first(); // get the first project
-                //   dd($products);
-                return Theme::partial('shortcodes.faqs', [
-                    'categories' => $categories,
-                    'project' => $project,
-                    'title' => $shortcode->title,
-                    'description' => $shortcode->description,
-                    'description2' => $shortcode->description2,
-                    'shortcode' => $shortcode,
-                ]);
-            }
+            },
+            __('List of FAQs'),
+            fn () => get_faq_categories_for_admin_config()
         );
 
-        shortcode()->setAdminConfig('faqs', function (array $attributes) {
-            $categories = app(FaqCategoryInterface::class)->pluck('name', 'id', ['status' => BaseStatusEnum::PUBLISHED]);
-
-            return Theme::partial('shortcodes.faqs-admin-config', compact('attributes', 'categories'));
-        });
-    }
-
-   if (is_plugin_active('faq')) {
-        add_shortcode(
+        register_theme_shortcode(
             'plot2',
             __('plot2'),
-            __('List of plot2'),
+            ['title', 'description', 'description2'],
             function (Shortcode $shortcode) {
-                $params = [
-                    'condition' => [
-                        'status' => BaseStatusEnum::PUBLISHED,
-                    ],
-                    'with' => [
-                        'faqs' => function ($query) {
-                            $query->wherePublished();
-                        },
-                    ],
-                    'order_by' => [
-                        'faq_categories.order' => 'ASC',
-                        'faq_categories.created_at' => 'DESC',
-                    ],
+                return [
+                    'categories' => get_faq_categories_for_shortcode($shortcode),
+                    'project' => DB::table('projectsposts')->where('id', 2)->first(),
                 ];
-
-                if ($shortcode->category_id) {
-                    $params['condition']['id'] = $shortcode->category_id;
-                }
-
-                $categories = app(FaqCategoryInterface::class)->advancedGet($params);
-               
-                $plotData = [];
-
-                foreach ($categories as $category) {
-                    foreach ($category->faqs as $faq) {
-                        if (!empty($faq->plot)) {
-                            $plotData[$faq->plot] = [
-                                'area'   => $faq->area,
-                                'north'  => $faq->north,
-                                'south'  => $faq->south,
-                                'east'   => $faq->east,
-                                'west'   => $faq->west,
-                                'price'  => $faq->price,
-                                'client' => $faq->client,
-                                'status' => $faq->status ?? 'Available',
-                                'plotData' => $plotData,
-                            ];
-                        }
-                    }
-                }
-
-       $project = DB::table('projectsposts')->where('id', 2)->first();
-                
-                return Theme::partial('shortcodes.plot2', [
-                    'categories' => $categories,
-                    'project' => $project,
-                    'title' => $shortcode->title,
-                    'description' => $shortcode->description,
-                    'description2' => $shortcode->description2,
-                    'shortcode' => $shortcode,
-                ]);
-            }
+            },
+            __('List of plot2'),
+            fn () => get_faq_categories_for_admin_config()
         );
 
-        shortcode()->setAdminConfig('faqs', function (array $attributes) {
-            $categories = app(FaqCategoryInterface::class)->pluck('name', 'id', ['status' => BaseStatusEnum::PUBLISHED]);
-
-            return Theme::partial('shortcodes.plot2-admin-config', compact('attributes', 'categories'));
-        });
-    }
-
- if (is_plugin_active('faq')) {
-        add_shortcode(
+        register_theme_shortcode(
             'plot3',
             __('plot3'),
-            __('List of plot3'),
+            ['title', 'description', 'description2'],
             function (Shortcode $shortcode) {
-                $params = [
-                    'condition' => [
-                        'status' => BaseStatusEnum::PUBLISHED,
-                    ],
-                    'with' => [
-                        'faqs' => function ($query) {
-                            $query->wherePublished();
-                        },
-                    ],
-                    'order_by' => [
-                        'faq_categories.order' => 'ASC',
-                        'faq_categories.created_at' => 'DESC',
-                    ],
+                return [
+                    'categories' => get_faq_categories_for_shortcode($shortcode),
+                    'project' => DB::table('projectsposts')->where('id', 6)->first(),
                 ];
-
-                if ($shortcode->category_id) {
-                    $params['condition']['id'] = $shortcode->category_id;
-                }
-
-                $categories = app(FaqCategoryInterface::class)->advancedGet($params);
-               
-                $plotData = [];
-
-                foreach ($categories as $category) {
-                    foreach ($category->faqs as $faq) {
-                        if (!empty($faq->plot)) {
-                            $plotData[$faq->plot] = [
-                                'area'   => $faq->area,
-                                'north'  => $faq->north,
-                                'south'  => $faq->south,
-                                'east'   => $faq->east,
-                                'west'   => $faq->west,
-                                'price'  => $faq->price,
-                                'client' => $faq->client,
-                                'status' => $faq->status ?? 'Available',
-                                'plotData' => $plotData,
-                            ];
-                        }
-                    }
-                }
-
-       $project = DB::table('projectsposts')->where('id', 6)->first();
-                
-                return Theme::partial('shortcodes.plot3', [
-                    'categories' => $categories,
-                    'project' => $project,
-                    'title' => $shortcode->title,
-                    'description' => $shortcode->description,
-                    'description2' => $shortcode->description2,
-                    'shortcode' => $shortcode,
-                ]);
-            }
+            },
+            __('List of plot3'),
+            fn () => get_faq_categories_for_admin_config()
         );
-
-        shortcode()->setAdminConfig('faqs', function (array $attributes) {
-            $categories = app(FaqCategoryInterface::class)->pluck('name', 'id', ['status' => BaseStatusEnum::PUBLISHED]);
-
-            return Theme::partial('shortcodes.plot3-admin-config', compact('attributes', 'categories'));
-        });
     }
+
     //ads india extra code for wowy
 
-    // if (is_plugin_active('services')) {
-        add_shortcode(
-            'Ads-slider',
-            __('Ads Slider'),
-            __('Ads Slider'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-slider', [
-                    'slideshadowtitle' => $shortcode->slideshadowtitle,
-                    'subtitle' => $shortcode->subtitle,
-                    'slidetitle' => $shortcode->slidetitle,
-                    //    'title' => $shortcode->title,
-                    'description' => $shortcode->description,
-                    'description2' => $shortcode->description2,
-                    'description3' => $shortcode->description3,
-                    'icon' => $shortcode->icon,
-                    'icon2' => $shortcode->icon2,
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
+    register_theme_shortcode('Ads-slider', __('Ads Slider'), [
+        'slideshadowtitle',
+        'subtitle',
+        'slidetitle',
+        'description',
+        'description2',
+        'description3',
+        'icon',
+        'icon2',
+    ]);
 
-        shortcode()->setAdminConfig('Ads-slider', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-slider-admin-config', compact('attributes'));
-        });
-    // }
+    register_theme_shortcode('Ads-home-icons', __('Ads Home Icons'), [
+        'title',
+        'shorttitle',
+        'icon',
+        'history',
+        'mission',
+        'vision',
+    ]);
 
-    // if (is_plugin_active('services')) {
-        add_shortcode(
-            'Ads-home-icons',
-            __('Ads Home Icons'),
-            __('Ads Home Icons'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-home-icons', [
-                    'title' => $shortcode->title,
-                    'shorttitle' => $shortcode->shorttitle,
-                    'icon' => $shortcode->icon,
-                    'history' => $shortcode->history,
-                    'mission' => $shortcode->mission,
-                    'vision' => $shortcode->vision,
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
+    register_theme_shortcode('Ads-home-weare', __('Ads Home Weare'), [
+        'title',
+        'description',
+        'description2',
+        'description3',
+        'description4',
+        'description5',
+        'description6',
+        'icon1',
+        'icon2',
+    ]);
 
-        shortcode()->setAdminConfig('Ads-home-icons', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-home-icons-admin-config', compact('attributes'));
-        });
-    // }
+    register_theme_shortcode('Ads-home-expertise', __('Ads Home Expertise'), [
+        'title',
+        'description',
+        'description2',
+        'icon1',
+    ]);
 
-    //    if (is_plugin_active('services')) {
-    add_shortcode(
-        'Ads-home-weare',
-        __('Ads Home Weare'),
-        __('Ads Home Weare'),
-        function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.Ads-home-weare', [
-                'title' => $shortcode->title,
-                'description' => $shortcode->description,
-                'description2' => $shortcode->description2,
-                'description3' => $shortcode->description3,
-                'description4' => $shortcode->description4,
-                'description5' => $shortcode->description5,
-                'description6' => $shortcode->description6,
-                'icon1' => $shortcode->icon1,
-                'icon2' => $shortcode->icon2,
-                'shortcode' => $shortcode,
-            ]);
-        }
-    );
+    register_theme_shortcode('Ads-home-excellence', __('Ads Home Excellence'), [
+        'title',
+        'description',
+        'description2',
+        'icon',
+        'icon2',
+    ]);
 
-    shortcode()->setAdminConfig('Ads-home-weare', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-home-weare-admin-config', compact('attributes'));
-    });
-    // }
+    register_theme_shortcode('Ads-home-clientlogo', __('Ads Home Clientlogo'), array_merge(
+        ['title', 'icon'],
+        array_map(fn (int $number) => 'icon' . $number, range(2, 12))
+    ));
 
+    register_theme_shortcode('Ads-home-inquiry', __('Ads Home Inquiry'), ['title']);
 
-    // if (is_plugin_active('ecommerce')) {
-    add_shortcode(
-        'Ads-home-expertise',
-        __('Ads Home Expertise'),
-        __('Ads Home Expertise'),
-        function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.Ads-home-expertise', [
-                'title' => $shortcode->title,
-                'description' => $shortcode->description,
-                'description2' => $shortcode->description2,
-                'icon1' => $shortcode->icon1,
-                'shortcode' => $shortcode,
-            ]);
-        }
-    );
+    register_theme_shortcode('Ads-about-us', __('Ads About Us'), [
+        'title',
+        'shorttitle',
+        'icon',
+        'icon2',
+        'icon3',
+        'icon4',
+        'history',
+        'history2',
+        'mission',
+        'vision',
+    ]);
 
-    shortcode()->setAdminConfig('Ads-home-expertise', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-home-expertise-admin-config', compact('attributes'));
-    });
-    // }
-    // if (is_plugin_active('services')) {
-        add_shortcode(
-            'Ads-home-excellence',
-            __('Ads Home Excellence'),
-            __('Ads Home Excellence'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-home-excellence', [
-                    'title' => $shortcode->title,
-                    'description' => $shortcode->description,
-                    'description2' => $shortcode->description2,
-                    'icon' => $shortcode->icon,
-                    'icon2' => $shortcode->icon2,
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
-
-        shortcode()->setAdminConfig('Ads-home-excellence', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-home-excellence-admin-config', compact('attributes'));
-        });
-    // }
-
-    // if (is_plugin_active('services')) {
-        add_shortcode(
-            'Ads-home-clientlogo',
-            __('Ads Home Clientlogo'),
-            __('Ads Home Clientlogo'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-home-clientlogo', [
-                    'title' => $shortcode->title,
-                    'icon' => $shortcode->icon,
-                    'icon2' => $shortcode->icon2,
-                    'icon3' => $shortcode->icon3,
-                    'icon4' => $shortcode->icon4,
-                    'icon5' => $shortcode->icon5,
-                    'icon6' => $shortcode->icon6,
-                    'icon7' => $shortcode->icon7,
-                    'icon8' => $shortcode->icon8,
-                    'icon9' => $shortcode->icon9,
-                    'icon10' => $shortcode->icon10,
-                    'icon11' => $shortcode->icon11,
-                    'icon12' => $shortcode->icon12,
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
-
-        shortcode()->setAdminConfig('Ads-home-clientlogo', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-home-clientlogo-admin-config', compact('attributes'));
-        });
-    // }
-    // if (is_plugin_active('ecommerce')) {
-        add_shortcode(
-            'Ads-home-inquiry',
-            __('Ads Home Inquiry'),
-            __('Ads Home Inquiry'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-home-inquiry', [
-                    'title' => $shortcode->title,
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
-
-        shortcode()->setAdminConfig('Ads-home-inquiry', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-home-inquiry-admin-config', compact('attributes'));
-        });
-    // }
-
-    // if (is_plugin_active('ecommerce')) {
-
-    add_shortcode(
-        'Ads-about-us',
-        __('Ads About Us'),
-        __('Ads About Us'),
-        function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.Ads-about-us', [
-                'title' => $shortcode->title,
-                'shorttitle' => $shortcode->shorttitle,
-                'icon' => $shortcode->icon,
-                'icon2' => $shortcode->icon2,
-                'icon3' => $shortcode->icon3,
-                'icon4' => $shortcode->icon4,
-                'history' => $shortcode->history,
-                'history2' => $shortcode->history2,
-                'mission' => $shortcode->mission,
-                'vision' => $shortcode->vision,
-                'shortcode' => $shortcode,
-            ]);
-        }
-    );
-
-    shortcode()->setAdminConfig('Ads-about-us', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-about-us-admin-config', compact('attributes'));
-    });
-
-    // }
     if (is_plugin_active('ecommerce')) {
+        register_theme_shortcode('Ads-news', __('Ads News'), ['title', 'headertitle', 'description', 'icon']);
 
-        add_shortcode(
-            'Ads-news',
-            __('Ads News'),
-            __('Ads News'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-news', [
-                    'title' => $shortcode->title,
-                    'headertitle' => $shortcode->headertitle,
-                    'description' => $shortcode->description,
-                    'icon' => $shortcode->icon, // Include the image attribute
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
-
-        shortcode()->setAdminConfig('Ads-news', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-news-admin-config', compact('attributes'));
-        });
-    }
-    if (is_plugin_active('ecommerce')) {
-
-        add_shortcode(
-            'Ads-industry',
-            __('Ads Industry'),
-            __('Ads Industry'),
-            function (Shortcode $shortcode) {
-                return Theme::partial('shortcodes.Ads-industry', [
-                    'title' => $shortcode->title,
-                    'headertitle' => $shortcode->headertitle,
-                    'description' => $shortcode->description,
-                    'icon' => $shortcode->icon, // Include the image attribute
-                    'shortcode' => $shortcode,
-                ]);
-            }
-        );
-
-        shortcode()->setAdminConfig('Ads-industry', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-industry-admin-config', compact('attributes'));
-        });
+        register_theme_shortcode('Ads-industry', __('Ads Industry'), ['title', 'headertitle', 'description', 'icon']);
     }
 
     if (is_plugin_active('solution')) {
-
-        add_shortcode(
+        register_theme_shortcode(
             'Ads-solution',
             __('Ads Solution'),
-            __('Ads Solution'),
+            ['title', 'headertitle', 'description', 'icon'],
             function (Shortcode $shortcode) {
-                $solution = get_featured_sposts(array_merge([
-                    'take' => (int)$shortcode->limit ?: 50,
-                ],));
-                return Theme::partial('shortcodes.Ads-solution', [
-                    'title' => $shortcode->title,
-                    'headertitle' => $shortcode->headertitle,
-                    'description' => $shortcode->description,
-                    'icon' => $shortcode->icon, // Include the image attribute
-                    'solution' => $solution,
-                ]);
+                return [
+                    'solution' => get_featured_sposts(['take' => (int)$shortcode->limit ?: 50]),
+                ];
             }
-            // function (Shortcode $shortcode) {
-            //     return Theme::partial('shortcodes.Ads-solution', [
-            //         'title' => $shortcode->title,
-            //         'headertitle' => $shortcode->headertitle,
-            //         'description' => $shortcode->description,
-            //         'icon' => $shortcode->icon, // Include the image attribute
-            //         'shortcode' => $shortcode,
-            //     ]);
-            // }
         );
-
-        shortcode()->setAdminConfig('Ads-solution', function (array $attributes) {
-            return Theme::partial('shortcodes.Ads-solution-admin-config', compact('attributes'));
-        });
     }
-    // if (is_plugin_active('ecommerce')) {
 
-    //     add_shortcode(
-    //         'Ads-product-categories',
-    //         __('Ads Product-categories'),
-    //         __('Ads Product-categories'),
-    //         function (Shortcode $shortcode) {
-    //             return Theme::partial('shortcodes.Ads-product-categories', [
-    //                 'title' => $shortcode->title,
-    //                 'headertitle' => $shortcode->headertitle,
-    //                 'description' => $shortcode->description,
-    //                 'icon' => $shortcode->icon, // Include the image attribute
-    //                 'shortcode' => $shortcode,
-    //             ]);
-    //         }
-    //     );
+    register_theme_shortcode('Ads-contact', __('Ads Contact'), ['title', 'headertitle', 'description']);
 
-    //     shortcode()->setAdminConfig('Ads-product-categories', function (array $attributes) {
-    //         return Theme::partial('shortcodes.Ads-product-categories-admin-config', compact('attributes'));
-    //     });
-
-    // }
-
-    // if (is_plugin_active('ecommerce')) {
-    add_shortcode(
-        'Ads-contact',
-        __('Ads Contact'),
-        __('Ads Contact'),
-        function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.Ads-contact', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'shortcode' => $shortcode,
-            ]);
-        }
-    );
-
-    shortcode()->setAdminConfig('Ads-contact', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-contact-admin-config', compact('attributes'));
-    });
-
-
-    add_shortcode(
-        'Ads-dholera',
-        __('Ads dholera'),
-        __('Ads dholera'),
-        function (Shortcode $shortcode) {
-            return Theme::partial('shortcodes.Ads-dholera', [
-                'title' => $shortcode->title,
-                'headertitle' => $shortcode->headertitle,
-                'description' => $shortcode->description,
-                'shortcode' => $shortcode,
-            ]);
-        }
-    );
-
-    shortcode()->setAdminConfig('Ads-dholera', function (array $attributes) {
-        return Theme::partial('shortcodes.Ads-dholera-admin-config', compact('attributes'));
-    });
-    // }
-
-    // if (is_plugin_active('ecommerce')) {
-    //     add_shortcode(
-    //         'Ads-contact',
-    //         __('Ads Contact'),
-    //         __('Ads Contact'),
-    //         function (Shortcode $shortcode) {
-    //             return Theme::partial('shortcodes.Ads-contact', [
-    //                 'title' => $shortcode->title,
-    //                 'headertitle' => $shortcode->headertitle,
-    //                 'description' => $shortcode->description,
-    //                 'shortcode' => $shortcode,
-    //             ]);
-    //         }
-    //     );
-
-    //     shortcode()->setAdminConfig('Ads-contact', function (array $attributes) {
-    //         return Theme::partial('shortcodes.Ads-contact-admin-config', compact('attributes'));
-    //     });
-    // }
+    register_theme_shortcode('Ads-dholera', __('Ads dholera'), ['title', 'headertitle', 'description']);
 });

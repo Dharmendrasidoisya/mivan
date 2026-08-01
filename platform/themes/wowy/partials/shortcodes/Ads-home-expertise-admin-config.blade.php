@@ -1,17 +1,10 @@
-<div class="mb-3">
-    <label class="form-label">{{ __('Title') }}</label>
-    <input type="text" name="title" value="{{ Arr::get($attributes, 'title') }}" class="form-control" placeholder="Title">
-</div>
-<div class="mb-3">
-    <label class="form-label">{{ __('Description') }}</label>
-    <textarea name="description" class="form-control " placeholder="description">{{ Arr::get($attributes, 'description') }}</textarea>
-</div>
-<div class="mb-3">
-    <label class="form-label">{{ __('Description2') }}</label>
-    <textarea name="description2" class="form-control " placeholder="description Second ">{{ Arr::get($attributes, 'description2') }}</textarea>
-</div>
-<div class="mb-3">
-    <label class="form-label">{{ __('Icon1') }}</label>
-    {!! Form::mediaImage('icon1', Arr::get($attributes, 'icon1')) !!}
-</div>
-{!! Theme::partial('shortcodes.includes.autoplay-settings', compact('attributes')) !!}
+{!! Theme::partial('shortcodes.includes.fields', [
+    'attributes' => $attributes,
+    'autoplay' => true,
+    'fields' => [
+        ['name' => 'title', 'label' => __('Title'), 'placeholder' => 'Title'],
+        ['name' => 'description', 'type' => 'textarea', 'label' => __('Description'), 'placeholder' => 'description'],
+        ['name' => 'description2', 'type' => 'textarea', 'label' => __('Description2'), 'placeholder' => 'description Second '],
+        ['name' => 'icon1', 'type' => 'image', 'label' => __('Icon1')],
+    ],
+]) !!}

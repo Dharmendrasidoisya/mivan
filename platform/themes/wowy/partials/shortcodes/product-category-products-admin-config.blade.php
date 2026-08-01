@@ -1,9 +1,7 @@
-<div class="mb-3">
-    <label class="form-label">{{ __('Product category ID') }}</label>
-    {!! Form::customSelect('category_id', $categories, Arr::get($attributes, 'category_id')) !!}
-</div>
-
-<div class="mb-3">
-    <label class="form-label">{{ __('Limit') }}</label>
-    <input type="number" name="limit" value="{{ Arr::get($attributes, 'limit', 8) }}" class="form-control" placeholder="{{ __('Limit') }}">
-</div>
+{!! Theme::partial('shortcodes.includes.fields', [
+    'attributes' => $attributes,
+    'fields' => [
+        ['name' => 'category_id', 'type' => 'select', 'label' => __('Product category ID'), 'options' => $categories],
+        ['name' => 'limit', 'type' => 'number', 'label' => __('Limit'), 'default' => 8],
+    ],
+]) !!}

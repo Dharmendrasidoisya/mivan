@@ -1,6 +1,7 @@
-<div class="mb-3">
-    <label class="form-label">{{ __('Title') }}</label>
-    <input type="text" name="title" value="{{ Arr::get($attributes, 'title') }}" class="form-control" placeholder="Title">
-</div>
-
-{!! Theme::partial('shortcodes.includes.autoplay-settings', compact('attributes')) !!}
+{!! Theme::partial('shortcodes.includes.fields', [
+    'attributes' => $attributes,
+    'autoplay' => true,
+    'fields' => [
+        ['name' => 'title', 'label' => __('Title'), 'placeholder' => 'Title'],
+    ],
+]) !!}
