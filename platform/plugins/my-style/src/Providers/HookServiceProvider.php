@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -29,13 +30,12 @@ class HookServiceProvider extends ServiceProvider
     {
         if (
             MyStyleHelper::isSupportedModel(get_class($object))
-            && Auth::user()->hasPermission('my-style.root')
+            && Auth::user()?->hasPermission('my-style.root')
         ) {
             $fileName = $this->fileName($object);
-            $file = $this->file($fileName);
 
-            if (File::exists($file)) {
-                File::delete($file);
+            foreach (['css', 'js'] as $type) {
+                $this->deleteFile($this->file($fileName, $type));
             }
         }
     }
@@ -44,7 +44,7 @@ class HookServiceProvider extends ServiceProvider
     {
         if (
             MyStyleHelper::isSupportedModel($object::class)
-            && Auth::user()->hasPermission('my-style.root')
+            && Auth::user()?->hasPermission('my-style.root')
         ) {
             MetaBox::addMetaBox(
                 'my_style',
@@ -80,7 +80,7 @@ class HookServiceProvider extends ServiceProvider
         $isWriteable = File::isWritable($path);
 
         if ($isWriteable && $fileName) {
-            $file = $this->file($fileName);
+            $file = $this->file($fileName, 'js');
 
             if (File::exists($file)) {
                 $js = BaseHelper::getFileData($file, false);
@@ -94,27 +94,18 @@ class HookServiceProvider extends ServiceProvider
     {
         if (
             MyStyleHelper::isSupportedModel($object::class)
-            && Auth::user()->hasPermission('my-style.root')
+            && Auth::user()?->hasPermission('my-style.root')
             && $request->has('has-my-style')
         ) {
             $fileName = $this->fileName($object);
             $css = strip_tags($request->input('my_custom_css', ''));
             $file = $this->file($fileName);
 
-            if (empty($css)) {
-                File::delete($file);
-            } else {
-                BaseHelper::saveFileData($file, $css, false);
-            }
+            $this->writeFile($file, $css);
 
             $js = strip_tags($request->input('my_custom_js', ''));
-            $file = $this->file($fileName, 'js');
 
-            if (empty($js)) {
-                File::delete($file);
-            } else {
-                BaseHelper::saveFileData($file, $js, false);
-            }
+            $this->writeFile($this->file($fileName, 'js'), $js);
         }
     }
 
@@ -139,6 +130,30 @@ class HookServiceProvider extends ServiceProvider
                     ->usePath()
                     ->add($fileName . '-my-style-js', 'js/' . $fileName . '.js', [], [], (string) filectime($js));
             }
+        }
+    }
+
+    protected function writeFile(string $file, string $content): void
+    {
+        if (empty($content)) {
+            $this->deleteFile($file);
+
+            return;
+        }
+
+        if (! BaseHelper::saveFileData($file, $content, false)) {
+            throw new RuntimeException(sprintf('Could not write custom style file [%s].', $file));
+        }
+    }
+
+    protected function deleteFile(string $file): void
+    {
+        if (! File::exists($file)) {
+            return;
+        }
+
+        if (! File::delete($file)) {
+            throw new RuntimeException(sprintf('Could not delete custom style file [%s].', $file));
         }
     }
 

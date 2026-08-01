@@ -745,7 +745,9 @@ textarea {
                                     name = fieldObj.value;
                                 }
                             }
-                            catch (e) { }
+                            catch (e) {
+                                console.error('Zoho form validation error:', e);
+                            }
                         }
                     }
                     if (!validateEmail223553000036407622()) {
