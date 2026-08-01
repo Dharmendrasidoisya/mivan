@@ -55,7 +55,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Botble\\Faq\\": "platform/plugins/faq/src/",
+            "Botble\\MyStyle\\": "platform/plugins/my-style/src/",
+            "Botble\\Products\\": "platform/plugins/products/src/",
+            "Botble\\Projects\\": "platform/plugins/projects/src/",
+            "Datlechin\\WhatsAppFloatingButton\\": "platform/plugins/whatsapp-floating-button/src/"
         }
     },
     "scripts": {
