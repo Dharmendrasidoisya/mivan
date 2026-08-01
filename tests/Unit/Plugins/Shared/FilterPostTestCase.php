@@ -27,7 +27,7 @@ abstract class FilterPostTestCase extends TestCase
 
     private function key(string $suffix): string
     {
-        return $this->taxonomyPrefix() . $suffix;
+        return $this->taxonomyPrefix().$suffix;
     }
 
     public function test_it_returns_default_filters_for_an_empty_request(): void

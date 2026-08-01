@@ -18,12 +18,12 @@ abstract class PostSchemaSettingRequestTestCase extends TestCase
 
     private function enabledField(): string
     {
-        return $this->settingPrefix() . '_post_schema_enabled';
+        return $this->settingPrefix().'_post_schema_enabled';
     }
 
     private function typeField(): string
     {
-        return $this->settingPrefix() . '_post_schema_type';
+        return $this->settingPrefix().'_post_schema_type';
     }
 
     public function test_it_accepts_valid_settings(): void
