@@ -4,12 +4,22 @@ namespace Botble\Faq\Imports;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Faq\Models\Faq;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class FaqImport implements ToModel, WithHeadingRow
+class FaqImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
- public function model(array $row)
+    public function rules(): array
+    {
+        return [
+            'plot' => ['required'],
+            'price' => ['nullable', 'numeric'],
+        ];
+    }
+
+    public function model(array $row)
     {
         return new Faq([
             'question'      => $row['project_name'] ?? 'Imported Project', 

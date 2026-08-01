@@ -2,6 +2,7 @@
 
 namespace Botble\Products\Repositories\Eloquent;
 
+use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Models\BaseQueryBuilder;
 use Botble\Products\Models\Post;
 use Botble\Products\Repositories\Interfaces\PostInterface;
@@ -69,7 +70,9 @@ class PostRepository extends RepositoriesAbstract implements PostInterface
 
         try {
             return $model->productscategories()->allRelatedIds()->toArray();
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            BaseHelper::logError($exception);
+
             return [];
         }
     }

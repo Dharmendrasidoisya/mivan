@@ -9,10 +9,13 @@ use Botble\Faq\Forms\FaqForm;
 use Botble\Faq\Http\Requests\FaqRequest;
 use Botble\Faq\Models\Faq;
 use Botble\Faq\Tables\FaqTable;
+use Botble\Base\Facades\BaseHelper;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException as ExcelValidationException;
 use Botble\Faq\Imports\FaqImport;
 use Botble\Base\Http\Responses\BaseHttpResponse;
+use Throwable;
 
 class FaqController extends BaseController
 {
@@ -42,15 +45,34 @@ class FaqController extends BaseController
         ]);
 
         try {
-            Excel::import(new FaqImport, $request->file('import_file'));
-            
+            Excel::import(new FaqImport(), $request->file('import_file'));
+
             return $response
                 ->setNextUrl(route('faq.index'))
                 ->setMessage(' (Plot, Area, Status) successfully import thai gaya che!');
-        } catch (\Exception $e) {
+        } catch (ExcelValidationException $exception) {
+            BaseHelper::logError($exception);
+
+            $errors = [];
+
+            foreach ($exception->failures() as $failure) {
+                $errors[] = sprintf(
+                    'Row %s (%s): %s',
+                    $failure->row(),
+                    $failure->attribute(),
+                    implode(' ', $failure->errors())
+                );
+            }
+
             return $response
                 ->setError()
-                ->setMessage('Error: ' . $e->getMessage());
+                ->setMessage(implode(' | ', array_slice($errors, 0, 10)) ?: $exception->getMessage());
+        } catch (Throwable $exception) {
+            BaseHelper::logError($exception);
+
+            return $response
+                ->setError()
+                ->setMessage(__('Could not import the file, please check the file format and try again.'));
         }
     }
     public function create()
