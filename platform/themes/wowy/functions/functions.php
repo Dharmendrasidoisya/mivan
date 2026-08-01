@@ -231,35 +231,20 @@ add_action(BASE_ACTION_META_BOXES, function ($context, $object) {
     switch (get_class($object)) {
         case Page::class:
             if ($context == 'top') {
-                MetaBox::addMetaBox(
+                theme_register_meta_box(
+                    get_class($object),
+                    $context,
                     'additional_page_fields',
                     __('Appearance'),
-                    function () {
-                        $headerStyle = null;
-                        $expandingProductCategories = 'no';
-                        $page = null;
-                        $args = func_get_args();
-                        if (! empty($args[0])) {
-                            $page = $args[0];
-                            $headerStyle = MetaBox::getMetaData($args[0], 'header_style', true);
-                            $expandingProductCategories = MetaBox::getMetaData(
-                                $args[0],
-                                'expanding_product_categories_on_the_homepage',
-                                true
-                            );
-                        }
-
-                        if (! $headerStyle && theme_option('header_style')) {
-                            $headerStyle = theme_option('header_style');
-                        }
-
-                        return Theme::partial(
-                            'additional-page-fields',
-                            compact('headerStyle', 'expandingProductCategories', 'page')
-                        );
-                    },
-                    get_class($object),
-                    $context
+                    'additional-page-fields',
+                    [
+                        'headerStyle' => ['meta' => 'header_style', 'theme_option' => 'header_style'],
+                        'expandingProductCategories' => [
+                            'meta' => 'expanding_product_categories_on_the_homepage',
+                            'default' => 'no',
+                        ],
+                        'page' => ['object' => true],
+                    ]
                 );
             }
 
@@ -267,104 +252,48 @@ add_action(BASE_ACTION_META_BOXES, function ($context, $object) {
 
         case SimpleSlider::class:
             if ($context == 'top') {
-                MetaBox::addMetaBox(
+                theme_register_meta_box(
+                    get_class($object),
+                    $context,
                     'additional_simple_slider_fields',
                     __('Appearance'),
-                    function () {
-                        $style = '';
-                        $args = func_get_args();
-                        if (! empty($args[0])) {
-                            $style = MetaBox::getMetaData($args[0], 'simple_slider_style', true);
-                        }
-
-                        return Theme::partial('additional-simple-slider-fields', compact('style'));
-                    },
-                    get_class($object),
-                    $context
+                    'additional-simple-slider-fields',
+                    ['style' => ['meta' => 'simple_slider_style', 'default' => '']]
                 );
             }
 
             break;
 
         case Product::class:
-            if ($context == 'top') {
-                if (EcommerceHelper::isEnabledAdditionInformation()) {
-                MetaBox::addMetaBox(
+            if ($context == 'top' && EcommerceHelper::isEnabledAdditionInformation()) {
+                theme_register_meta_box(
+                    get_class($object),
+                    $context,
                     'additional_product_fields ',
                     __('Addition Information'),
-                    function () {
-                        $layout = null;
-                        $args = func_get_args();
-                        if (! empty($args[0])) {
-                            $layout = MetaBox::getMetaData($args[0], 'layout', true);
-                        }
-
-                        if (! $layout && theme_option('product_single_layout')) {
-                            $layout = theme_option('product_single_layout');
-                        }
-
-                        return Theme::partial('additional-product-fields', compact('layout'));
-                    },
-                    get_class($object),
-                    $context
+                    'additional-product-fields',
+                    ['layout' => ['meta' => 'layout', 'theme_option' => 'product_single_layout']]
                 );
             }
-   }
+
             break;
 
         case Post::class:
             if ($context == 'top') {
-                MetaBox::addMetaBox(
+                theme_register_meta_box(
+                    get_class($object),
+                    $context,
                     'additional_post_fields',
                     __('Addition Information'),
-                    function () {
-                        $timeToRead = null;
-                        $layout = null;
-                        $args = func_get_args();
-                        if (! empty($args[0])) {
-                            $timeToRead = MetaBox::getMetaData($args[0], 'time_to_read', true);
-                            $layout = MetaBox::getMetaData($args[0], 'layout', true);
-                        }
-
-                        if (! $layout && theme_option('blog_single_layout')) {
-                            $layout = theme_option('blog_single_layout');
-                        }
-
-                        return Theme::partial('blog-post-fields', compact('timeToRead', 'layout'));
-                    },
-                    get_class($object),
-                    $context
+                    'blog-post-fields',
+                    [
+                        'timeToRead' => 'time_to_read',
+                        'layout' => ['meta' => 'layout', 'theme_option' => 'blog_single_layout'],
+                    ]
                 );
             }
 
             break;
-
-            case Post::class:
-                if ($context == 'top') {
-                    MetaBox::addMetaBox(
-                        'additional_post_fields',
-                        __('Addition Information'),
-                        function () {
-                            $timeToRead = null;
-                            $layout = null;
-                            $args = func_get_args();
-                            if (! empty($args[0])) {
-                                $timeToRead = MetaBox::getMetaData($args[0], 'time_to_read', true);
-                                $layout = MetaBox::getMetaData($args[0], 'layout', true);
-                            }
-    
-                            if (! $layout && theme_option('services_single_layout')) {
-                                $layout = theme_option('services_single_layout');
-                            }
-    
-                            return Theme::partial('services-post-fields', compact('timeToRead', 'layout'));
-                        },
-                        get_class($object),
-                        $context
-                    );
-                }
-    
-                break;
     }
 }, 75, 2);
 
@@ -401,57 +330,27 @@ add_action([BASE_ACTION_AFTER_CREATE_CONTENT, BASE_ACTION_AFTER_UPDATE_CONTENT],
             break;
 
         case SimpleSliderItem::class:
-            if ($request->has('button_text')) {
-                MetaBox::saveMetaBoxData($object, 'button_text', $request->input('button_text'));
-            }
-
-            if ($request->has('subtitle')) {
-                MetaBox::saveMetaBoxData($object, 'subtitle', $request->input('subtitle'));
-            }
-
-            if ($request->has('highlight_text')) {
-                MetaBox::saveMetaBoxData($object, 'highlight_text', $request->input('highlight_text'));
-            }
+            theme_save_meta_box_fields($object, $request, ['button_text', 'subtitle', 'highlight_text']);
 
             break;
 
         case Product::class:
-            if ($request->has('layout')) {
-                MetaBox::saveMetaBoxData($object, 'layout', $request->input('layout'));
-            }
+            theme_save_meta_box_fields($object, $request, ['layout']);
 
             break;
 
         case Post::class:
-            if ($request->has('time_to_read')) {
-                MetaBox::saveMetaBoxData($object, 'time_to_read', $request->input('time_to_read'));
-            }
-
-            if ($request->has('layout')) {
-                MetaBox::saveMetaBoxData($object, 'layout', $request->input('layout'));
-            }
+            theme_save_meta_box_fields($object, $request, ['time_to_read', 'layout']);
 
             break;
 
         case FlashSale::class:
-            if ($request->has('subtitle')) {
-                MetaBox::saveMetaBoxData($object, 'subtitle', $request->input('subtitle'));
-            }
-
-            if ($request->has('image')) {
-                MetaBox::saveMetaBoxData($object, 'image', $request->input('image'));
-            }
+            theme_save_meta_box_fields($object, $request, ['subtitle', 'image']);
 
             break;
 
         case Ads::class:
-            if ($request->has('button_text')) {
-                MetaBox::saveMetaBoxData($object, 'button_text', $request->input('button_text'));
-            }
-
-            if ($request->has('subtitle')) {
-                MetaBox::saveMetaBoxData($object, 'subtitle', $request->input('subtitle'));
-            }
+            theme_save_meta_box_fields($object, $request, ['button_text', 'subtitle']);
 
             break;
     }
