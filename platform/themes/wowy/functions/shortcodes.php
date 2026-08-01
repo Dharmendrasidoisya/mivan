@@ -31,33 +31,21 @@ app()->booted(function () {
         'Ads-blogs',
         __('Ads Blogs'),
         ['title', 'headertitle', 'description', 'icon'],
-        function (Shortcode $shortcode) {
-            return [
-                'posts' => get_featured_blog_posts(['take' => (int)$shortcode->limit ?: 50]),
-            ];
-        }
+        fn () => ['posts' => get_featured_blog_posts()]
     );
 
     register_theme_shortcode(
         'Ads-blogs-page',
         __('Ads Blogs-page'),
         ['title', 'headertitle', 'description', 'icon'],
-        function (Shortcode $shortcode) {
-            return [
-                'posts' => get_featured_blog_posts(['take' => (int)$shortcode->limit ?: 50]),
-            ];
-        }
+        fn () => ['posts' => get_featured_blog_posts()]
     );
 
     register_theme_shortcode(
         'Ads-services',
         __('Ads Services'),
         ['title', 'headertitle', 'description', 'icon'],
-        function (Shortcode $shortcode) {
-            return [
-                'projects' => get_featured_projects_posts(['take' => (int)$shortcode->limit ?: 50]),
-            ];
-        }
+        fn () => ['projects' => get_featured_projects_posts()]
     );
 
     if (is_plugin_active('products')) {
@@ -65,11 +53,7 @@ app()->booted(function () {
             'Ads-products',
             __('Ads Products'),
             ['title', 'headertitle', 'description', 'icon'],
-            function (Shortcode $shortcode) {
-                return [
-                    'products' => get_featured_projects_posts(['take' => (int)$shortcode->limit ?: 50]),
-                ];
-            }
+            fn () => ['products' => get_featured_projects_posts()]
         );
     }
 
@@ -77,26 +61,14 @@ app()->booted(function () {
         'Ads-productcategory',
         __('Ads Productcategory'),
         ['title', 'headertitle', 'description', 'icon'],
-        function (Shortcode $shortcode) {
-            return [
-                'products' => get_featured_products_posts([
-                    'take' => (int)$shortcode->limit ?: 50,
-                    'order_by' => 'id',
-                    'order' => 'desc',
-                ]),
-            ];
-        }
+        fn () => ['products' => get_featured_products_posts()]
     );
 
     register_theme_shortcode(
         'Ads-servicescategory',
         __('Ads Servicescategory'),
         ['title', 'headertitle', 'description', 'icon'],
-        function (Shortcode $shortcode) {
-            return [
-                'productcategory' => get_featured_projects_posts(['take' => (int)$shortcode->limit ?: 50]),
-            ];
-        }
+        fn () => ['productcategory' => get_featured_projects_posts()]
     );
 
     if (is_plugin_active('ecommerce')) {
@@ -358,14 +330,9 @@ app()->booted(function () {
             __('FAQs'),
             ['title', 'description', 'description2'],
             function (Shortcode $shortcode) {
-                $project = get_featured_projects_posts([
-                    'take' => 1,
-                    'select' => ['id', 'title', 'location', 'slug', 'image'],
-                ])->first();
-
                 return [
                     'categories' => get_faq_categories_for_shortcode($shortcode),
-                    'project' => $project->first(),
+                    'project' => get_featured_projects_posts()->first(),
                 ];
             },
             __('List of FAQs'),

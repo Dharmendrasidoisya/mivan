@@ -62,7 +62,6 @@ $plots = \DB::table('faqs')
     })
     ->get()
     ->keyBy('plot');
-                    // dd($plots);
                     ?>
                     <script>
                         window.plotData = @json($plots);
@@ -70,97 +69,6 @@ $plots = \DB::table('faqs')
                 </div>
             </div>
         </div>
-        <!--<div id="plotPriceForm" style="display:none;">-->
-        <!--    <div class="form-header">-->
-        <!--        <span class="ul-section-sub-title">Plot Price Calculation</span>-->
-        <!--        {{-- <h2 class="ul-section-title">Fill details to calculate area and installments</h2> --}}-->
-        <!--        <h2 class="ul-section-title"> {!! $project->name !!} - Offer Letter</h2>-->
-        <!--    </div>-->
-
-        <!--    <div class="top-info-grid">-->
-        <!--        <div class="form-section">-->
-        <!--            <label for="form_name">Name</label>-->
-        <!--            <input type="text" id="form_name" placeholder="Enter your name">-->
-        <!--        </div>-->
-        <!--        <div class="form-section">-->
-        <!--            <label for="form_contact">Contact No.</label>-->
-        <!--            <input type="text" id="form_contact" placeholder="Enter contact number">-->
-        <!--        </div>-->
-        <!--        <div class="form-section">-->
-        <!--            <label for="form_email">Email Id</label>-->
-        <!--            <input type="email" id="form_email" placeholder="Enter email">-->
-        <!--        </div>-->
-        <!--    </div>-->
-
-        <!--    <div class="form-section">-->
-        <!--        <label for="form_plot">Select Plot No.</label>-->
-        <!--        <select id="form_plot">-->
-        <!--            <option value="">-- Select Plot --</option>-->
-        <!--        </select>-->
-        <!--    </div>-->
-
-        <!--    <div class="form-grid">-->
-        <!--        <div>-->
-        <!--            <label>Plot Area (Sq. Yard)</label>-->
-        <!--            <input type="text" id="form_area_yard" readonly>-->
-        <!--        </div>-->
-        <!--        <div>-->
-        <!--            <label>Plot Area (Sq. Feet)</label>-->
-        <!--            <input type="text" id="form_area_feet" readonly>-->
-        <!--        </div>-->
-        <!--    </div>-->
-
-        <!--    <div class="form-grid">-->
-        <!--        <div>-->
-        <!--            <label>Price per Sq. Yard</label>-->
-        <!--            <input type="text" id="form_price_yard" readonly>-->
-        <!--        </div>-->
-        <!--        <div>-->
-        <!--            <label>Price per Sq. Feet</label>-->
-        <!--            <input type="text" id="form_price_feet" readonly>-->
-        <!--        </div>-->
-        <!--    </div>-->
-
-        <!--    <div class="form-section">-->
-        <!--        <label>Total Payment</label>-->
-        <!--        <input type="text" id="form_total" readonly>-->
-        <!--    </div>-->
-
-        <!--    <h4>Option-1</h4>-->
-        <!--    <div class="form-grid">-->
-        <!--        <div>-->
-        <!--            <label>Down Payment (25%)</label>-->
-        <!--            <input type="text" id="form_down1" readonly>-->
-        <!--        </div>-->
-        <!--        <div>-->
-        <!--            <label>Rest Payment (75%)</label>-->
-        <!--            <input type="text" id="form_rest1" readonly>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--    <p>Down Payment: Within One Month | Rest Payment: Within Three Months</p>-->
-
-        <!--    <h4>Option-2</h4>-->
-        <!--    <div class="form-grid">-->
-        <!--        <div>-->
-        <!--            <label>Down Payment (25%)</label>-->
-        <!--            <input type="text" id="form_down2" readonly>-->
-        <!--        </div>-->
-        <!--        <div>-->
-        <!--            <label>12 Months Installments</label>-->
-        <!--            <input type="text" id="form_install12" readonly>-->
-        <!--        </div>-->
-        <!--        <div>-->
-        <!--            <label>24 Months Installments</label>-->
-        <!--            <input type="text" id="form_install24" readonly>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--    <p>Down Payment: Within One Month | Rest Payment: Per Month Installments</p>-->
-
-        <!--    <div class="form-buttons">-->
-        <!--        <button id="sendEmail">SEND EMAIL</button>-->
-        <!--        <button id="createPDF">CREATE PDF</button>-->
-        <!--    </div>-->
-        <!--</div>-->
     </div>
 </div>
 <div id="plotTooltip"

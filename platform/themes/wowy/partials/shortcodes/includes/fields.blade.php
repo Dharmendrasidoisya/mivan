@@ -8,12 +8,13 @@
         $label = $field['label'];
         $placeholder = $field['placeholder'] ?? $label;
         $value = Arr::get($attributes, $name, $field['default'] ?? null);
+        $id = 'shortcode-field-' . $name;
     @endphp
     <div class="mb-3">
-        <label class="form-label">{{ $label }}</label>
+        <label class="form-label" for="{{ $id }}">{{ $label }}</label>
         @switch($type)
             @case('textarea')
-                <textarea name="{{ $name }}" class="form-control" @isset($field['rows']) rows="{{ $field['rows'] }}" @endisset placeholder="{{ $placeholder }}">{{ $value }}</textarea>
+                <textarea id="{{ $id }}" name="{{ $name }}" class="form-control" @isset($field['rows']) rows="{{ $field['rows'] }}" @endisset placeholder="{{ $placeholder }}">{{ $value }}</textarea>
             @break
 
             @case('image')
@@ -25,7 +26,7 @@
             @break
 
             @default
-                <input type="{{ $type }}" name="{{ $name }}" value="{{ $value }}" class="form-control" placeholder="{{ $placeholder }}">
+                <input id="{{ $id }}" type="{{ $type }}" name="{{ $name }}" value="{{ $value }}" class="form-control" placeholder="{{ $placeholder }}">
         @endswitch
     </div>
 @endforeach
