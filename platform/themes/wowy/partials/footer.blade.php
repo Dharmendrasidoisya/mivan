@@ -679,7 +679,7 @@ textarea {
                         <textarea name='message' placeholder='Message *' class="lbla"  style="height: 38px;"></textarea>
                     </div>
                 </div>
-                 <div class="g-recaptcha" data-sitekey="6LeReFIsAAAAAIP9MCmCOY9VjrK96-W03umJ53y3" style="margin:0px 0;"></div> 
+                 <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" style="margin:0px 0;"></div> 
                 
                                 <!-- Submit Button -->
                                 <div class='zcwf_row'>

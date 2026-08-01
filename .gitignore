@@ -7,6 +7,8 @@
 Thumbs.db
 /bower_components
 .env
+.env.*
+!.env.example
 .env.backup
 /.idea
 /.vscode
@@ -52,3 +54,10 @@ resources/docs
 storage/framework/laravel-excel/
 /.scribe
 /.env.testing
+
+# Lead/enquiry dumps and mail logs written at runtime (contain personal data)
+/public/inquirycontactus.txt
+/public/error_log
+/public/mail_error.log
+/public/mail_success.log
+*.log

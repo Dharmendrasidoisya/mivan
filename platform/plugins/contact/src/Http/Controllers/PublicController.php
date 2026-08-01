@@ -9,8 +9,9 @@ use Botble\Contact\Events\SentContactEvent;
 use Botble\Contact\Http\Requests\ContactRequest;
 use Botble\Contact\Models\Contact;
 use Exception;
-use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class PublicController extends BaseController
 {
@@ -21,12 +22,24 @@ class PublicController extends BaseController
             'g-recaptcha-response' => 'required',
         ]);
 
+        $recaptchaSecret = config('services.recaptcha.secret');
+
+        if (! $recaptchaSecret) {
+            BaseHelper::logError(new Exception('Missing RECAPTCHA_SECRET_KEY, refusing to accept contact submissions.'));
+
+            return $this
+                ->httpResponse()
+                ->setError()
+                ->setMessage(__("Can't send message at this time, please try again later!"));
+        }
+
         $recaptchaResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret'   => env('RECAPTCHA_SECRET_KEY'),
+            'secret' => $recaptchaSecret,
             'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $request->ip(),
         ]);
 
-        if (!($recaptchaResponse->json()['success'] ?? false)) {
+        if (! ($recaptchaResponse->json()['success'] ?? false)) {
             return $this
                 ->httpResponse()
                 ->setError()
@@ -73,7 +86,9 @@ class PublicController extends BaseController
             /**
              * @var Contact $contact
              */
-            $contact = Contact::query()->create($request->input());
+            $contact = Contact::query()->create(
+                Arr::only($request->validated(), ['name', 'email', 'phone', 'address', 'subject', 'content'])
+            );
 
             event(new SentContactEvent($contact));
 
