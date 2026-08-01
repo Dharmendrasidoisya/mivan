@@ -19,7 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => array_filter(
+        explode(',', (string) env('CORS_ALLOWED_ORIGINS', env('APP_URL', '')))
+    ),
 
     'allowed_origins_patterns' => [],
 

@@ -1,3 +1,8 @@
+# Block dotfiles and runtime data/log files from being served directly.
+<FilesMatch "(^\.|\.(env|log|ini|sql|sqlite|bak|old|swp)$|^(error_log|inquirycontactus\.txt)$)">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

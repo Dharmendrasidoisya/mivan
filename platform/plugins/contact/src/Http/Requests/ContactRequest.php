@@ -16,6 +16,8 @@ class ContactRequest extends Request
             'email' => ['required', new EmailRule(), 'max:80'],
             'content' => ['required', 'string', 'max:1000'],
             'phone' => ['nullable', new PhoneNumberRule()],
+            'address' => ['nullable', 'string', 'max:255'],
+            'subject' => ['nullable', 'string', 'max:255'],
         ];
 
         if (is_plugin_active('captcha')) {

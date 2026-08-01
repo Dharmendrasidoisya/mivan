@@ -1,5 +1,13 @@
+# Never serve dotfiles, environment files, logs or archives from the project root.
+<FilesMatch "(^\.|\.(env|log|ini|sql|sqlite|bak|old|swp)$|^(composer\.(json|lock)|package\.json|artisan|docker-compose\.yml|phpunit\.xml)$)">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Block direct access to application directories that must never be web served.
+    RewriteRule ^(app|bootstrap|config|database|platform|resources|routes|tests)(/|$) - [F,L]
  
     # Force HTTPS
     RewriteCond %{HTTPS} off
